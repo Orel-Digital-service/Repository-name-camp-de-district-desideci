@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Membre du Bureau – Camp de District de Sideci</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+
+    /* ── Variables ── */
+    :root {
+      --bleu-nuit  : #001466;
+      --bleu-vif   : #0033cc;
+      --bleu-clair : #4488ff;
+      --or         : #f0c040;
+      --blanc      : #ffffff;
+    }
+
+    /* ── Reset & base ── */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family    : 'Rajdhani', sans-serif;
+      background     : var(--bleu-nuit);
+      min-height     : 100vh;
+      display        : flex;
+      flex-direction : column;
+      align-items    : center;
+      justify-content: center;
+      overflow       : hidden;
+      text-align     : center;
+      padding        : 20px;
+    }
+
+    /* ── Fond animé ── */
+    body::before {
+      content       : '';
+      position      : fixed;
+      inset         : -50%;
+      background    : radial-gradient(ellipse at 30% 40%, #1a56ff44, transparent 60%),
+                      radial-gradient(ellipse at 70% 70%, #0011aa44, transparent 60%);
+      animation     : tourner 20s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes tourner {
+      from { transform: rotate(0deg)   scale(1.2); }
+      to   { transform: rotate(360deg) scale(1.2); }
+    }
+
+    /* ── Carte centrale ── */
+    .carte {
+      position      : relative;
+      z-index       : 2;
+      background    : rgba(255,255,255,0.05);
+      border        : 2px solid rgba(240,192,64,0.4);
+      backdrop-filter: blur(16px);
+      border-radius : 24px;
+      padding       : 48px 40px 40px;
+      max-width     : 420px;
+      width         : 100%;
+      animation     : apparaitre 0.7s ease both;
+      box-shadow    : 0 20px 60px rgba(0,0,0,0.5);
+    }
+    @keyframes apparaitre {
+      from { opacity:0; transform: scale(0.85) translateY(30px); }
+      to   { opacity:1; transform: scale(1)    translateY(0);    }
+    }
+
+    /* ── Logo ── */
+    .logo {
+      width         : 90px;
+      display       : block;
+      margin        : 0 auto 20px;
+      filter        : drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+      animation     : rebond 2.5s ease-in-out infinite;
+    }
+    @keyframes rebond {
+      0%, 100% { transform: translateY(0);   }
+      50%      { transform: translateY(-8px); }
+    }
+
+    /* ── Étiquette organisation ── */
+    .org {
+      font-size      : 0.75rem;
+      font-weight    : 700;
+      letter-spacing : 0.25em;
+      color          : var(--or);
+      text-transform : uppercase;
+      margin-bottom  : 6px;
+    }
+
+    /* ── Séparateur doré ── */
+    .ligne {
+      width      : 60px;
+      height     : 2px;
+      background : linear-gradient(90deg, transparent, var(--or), transparent);
+      margin     : 12px auto;
+    }
+
+    /* ── Numéro du membre ── */
+    .numero {
+      font-family  : 'Bebas Neue', cursive;
+      font-size    : 1rem;
+      color        : rgba(255,255,255,0.4);
+      letter-spacing: 0.3em;
+      margin-bottom: 8px;
+    }
+
+    /* ── Rôle principal ── */
+    .role {
+      font-family    : 'Bebas Neue', cursive;
+      font-size      : clamp(2rem, 8vw, 3rem);
+      color          : var(--blanc);
+      line-height    : 1.1;
+      letter-spacing : 0.05em;
+      text-shadow    : 0 4px 20px rgba(0,0,120,0.5);
+      margin-bottom  : 24px;
+    }
+
+    /* ── Badge doré ── */
+    .badge {
+      display        : inline-block;
+      background     : linear-gradient(135deg, var(--or), #c89000);
+      color          : var(--bleu-nuit);
+      font-weight    : 700;
+      font-size      : 0.8rem;
+      letter-spacing : 0.15em;
+      text-transform : uppercase;
+      padding        : 6px 18px;
+      border-radius  : 999px;
+      margin-bottom  : 28px;
+    }
+
+    /* ── Camp ── */
+    .camp {
+      font-family    : 'Bebas Neue', cursive;
+      font-size      : 1.1rem;
+      letter-spacing : 0.2em;
+      color          : rgba(255,255,255,0.5);
+      text-transform : uppercase;
+    }
+
+    /* ── Page erreur (si ID inconnu) ── */
+    .erreur {
+      color     : rgba(255,80,80,0.9);
+      font-size : 1.1rem;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="carte" id="carte">
+    <!-- Contenu injecté par JavaScript -->
+  </div>
+
+  <script>
+    /* ══════════════════════════════════════════
+       script inline — lecture du paramètre ?id=
+       ══════════════════════════════════════════ */
+
+    /* 1. Liste des 16 membres du bureau */
+    var membres = [
+      { id: 1,  role: "Directeur du Camp"                    },
+      { id: 2,  role: "Directeur Adjoint"                    },
+      { id: 3,  role: "Secrétaire du Camp"                   },
+      { id: 4,  role: "Commissaire Police"                   },
+      { id: 5,  role: "Commissaire de Police Adjoint"        },
+      { id: 6,  role: "Secrétaire de la Police"              },
+      { id: 7,  role: "Responsable Cuisine"                  },
+      { id: 8,  role: "Responsable Cuisine Adjointe"         },
+      { id: 9,  role: "Responsable Prière"                   },
+      { id: 10, role: "Responsable Prière Adjoint"           },
+      { id: 11, role: "Responsable Sport"                    },
+      { id: 12, role: "Responsable Sport Adjoint"            },
+      { id: 13, role: "Chargé de Mission"                    },
+      { id: 14, role: "Responsable à l'Animation"            },
+      { id: 15, role: "Responsable à l'Animation Adjoint"   },
+      { id: 16, role: "Infirmier du Camp"                    }
+    ];
+
+    /* 2. Lire le paramètre ?id= dans l'URL */
+    var params  = new URLSearchParams(window.location.search);
+    var idParam = parseInt(params.get('id'));
+
+    /* 3. Trouver le membre correspondant */
+    var membre = membres.find(function(m) { return m.id === idParam; });
+
+    /* 4. Construire le contenu de la carte */
+    var carte = document.getElementById('carte');
+
+    if (membre) {
+
+      /* Formater le numéro sur 2 chiffres */
+      var numFormate = membre.id < 10 ? '0' + membre.id : '' + membre.id;
+
+      carte.innerHTML =
+        /* Logo JEA */
+        '<img class="logo" src="logo_jea.png" alt="Logo JEA"/>' +
+
+        /* Organisation */
+        '<p class="org">Jeunesse Évangélique Africaine</p>' +
+        '<div class="ligne"></div>' +
+
+        /* Numéro */
+        '<p class="numero">MEMBRE N° ' + numFormate + '</p>' +
+
+        /* Rôle */
+        '<h1 class="role">' + membre.role + '</h1>' +
+
+        /* Badge officiel */
+        '<span class="badge">⛺ Bureau Officiel</span>' +
+
+        /* Nom du camp */
+        '<p class="camp">Camp de District de Sideci</p>';
+
+      /* Titre de la page */
+      document.title = membre.role + ' – Camp de District de Sideci';
+
+    } else {
+
+      /* ID inconnu ou absent → message d'erreur */
+      carte.innerHTML =
+        '<img class="logo" src="logo_jea.png" alt="Logo JEA"/>' +
+        '<p class="erreur">⚠️ Membre introuvable.<br/>Vérifie le QR code.</p>';
+    }
+  </script>
+
+</body>
+</html>
