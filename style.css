@@ -1,0 +1,296 @@
+/* ══════════════════════════════════════════════
+   style.css — Camp de District de Sideci (J.E.A)
+   Auteur  : Bureau Camp Sideci
+   Version : 1.0
+   ══════════════════════════════════════════════ */
+
+
+/* ─────────────────────────────────────────────
+   1. VARIABLES CSS (couleurs, polices)
+   ───────────────────────────────────────────── */
+:root {
+  --bleu-vif   : #0033cc;   /* Bleu principal */
+  --bleu-nuit  : #001466;   /* Bleu foncé (fond bouclier) */
+  --bleu-clair : #4488ff;   /* Bleu dégradé secondaire */
+  --blanc      : #ffffff;
+  --or         : #f0c040;   /* Doré JEA */
+  --bg-page    : #00228a;   /* Couleur de fond page */
+  --carte-bg   : rgba(255, 255, 255, 0.06);
+  --carte-bord : rgba(255, 255, 255, 0.12);
+}
+
+
+/* ─────────────────────────────────────────────
+   2. RESET & BASE
+   ───────────────────────────────────────────── */
+*, *::before, *::after {
+  margin      : 0;
+  padding     : 0;
+  box-sizing  : border-box;
+}
+
+body {
+  font-family : 'Rajdhani', sans-serif;
+  background  : var(--bg-page);
+  min-height  : 100vh;
+  display     : flex;
+  flex-direction : column;
+  align-items : center;
+  overflow-x  : hidden;
+  color       : var(--blanc);
+}
+
+
+/* ─────────────────────────────────────────────
+   3. FOND ANIMÉ (blobs lumineux)
+   ───────────────────────────────────────────── */
+body::before,
+body::after {
+  content        : '';
+  position       : fixed;
+  border-radius  : 50%;
+  filter         : blur(80px);
+  opacity        : 0.35;
+  pointer-events : none;
+  animation      : derive 12s ease-in-out infinite alternate;
+}
+
+/* Blob haut-gauche */
+body::before {
+  width      : 600px;
+  height     : 600px;
+  background : radial-gradient(circle, #1a56ff, transparent 70%);
+  top        : -150px;
+  left       : -150px;
+}
+
+/* Blob bas-droite */
+body::after {
+  width           : 500px;
+  height          : 500px;
+  background      : radial-gradient(circle, #0011aa, transparent 70%);
+  bottom          : -120px;
+  right           : -120px;
+  animation-delay : -6s;
+}
+
+@keyframes derive {
+  from { transform: translate(0, 0)     scale(1);   }
+  to   { transform: translate(40px, 30px) scale(1.1); }
+}
+
+
+/* ─────────────────────────────────────────────
+   4. EN-TÊTE (HEADER)
+   ───────────────────────────────────────────── */
+header {
+  width      : 100%;
+  text-align : center;
+  padding    : 48px 20px 24px;
+  position   : relative;
+  z-index    : 2;
+}
+
+/* Logo bouclier JEA */
+.logo-shield {
+  width      : 80px;
+  display    : block;
+  margin     : 0 auto 16px;
+  filter     : drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+  animation  : glisserBas 0.8s ease both;
+}
+
+/* Sous-titre organisation */
+.tag {
+  font-weight    : 700;
+  font-size      : 0.85rem;
+  letter-spacing : 0.25em;
+  color          : var(--or);
+  text-transform : uppercase;
+  animation      : glisserBas 0.8s 0.1s ease both;
+}
+
+/* Titre principal */
+h1 {
+  font-family : 'Bebas Neue', cursive;
+  font-size   : clamp(2.8rem, 10vw, 5.5rem);
+  line-height : 0.95;
+  letter-spacing : 0.04em;
+  color       : var(--blanc);
+  text-shadow : 0 4px 24px rgba(0, 0, 80, 0.6);
+  animation   : glisserBas 0.8s 0.2s ease both;
+}
+
+/* Mot coloré dans le titre */
+h1 span {
+  color : var(--or);
+}
+
+/* Ligne de sous-titre */
+.subtitle {
+  font-size      : 1rem;
+  color          : rgba(255, 255, 255, 0.65);
+  letter-spacing : 0.15em;
+  text-transform : uppercase;
+  margin-top     : 6px;
+  animation      : glisserBas 0.8s 0.3s ease both;
+}
+
+/* Ligne décorative dorée */
+.divider {
+  width      : 80px;
+  height     : 3px;
+  background : linear-gradient(90deg, transparent, var(--or), transparent);
+  margin     : 18px auto 0;
+  animation  : glisserBas 0.8s 0.4s ease both;
+}
+
+/* Animation d'entrée header */
+@keyframes glisserBas {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0);     }
+}
+
+
+/* ─────────────────────────────────────────────
+   5. TITRE DE SECTION
+   ───────────────────────────────────────────── */
+.section-title {
+  font-family    : 'Bebas Neue', cursive;
+  font-size      : 1.4rem;
+  letter-spacing : 0.2em;
+  color          : var(--or);
+  text-align     : center;
+  margin         : 36px 0 20px;
+  text-transform : uppercase;
+  position       : relative;
+  z-index        : 2;
+}
+
+
+/* ─────────────────────────────────────────────
+   6. GRILLE DES MEMBRES
+   ───────────────────────────────────────────── */
+.grid {
+  width       : 100%;
+  max-width   : 860px;
+  padding     : 0 16px 60px;
+  display     : grid;
+  grid-template-columns : repeat(auto-fill, minmax(240px, 1fr));
+  gap         : 14px;
+  position    : relative;
+  z-index     : 2;
+}
+
+
+/* ─────────────────────────────────────────────
+   7. CARTE MEMBRE
+   ───────────────────────────────────────────── */
+.card {
+  background     : var(--carte-bg);
+  border         : 1px solid var(--carte-bord);
+  backdrop-filter: blur(10px);
+  border-radius  : 14px;
+  padding        : 20px 18px;
+  display        : flex;
+  align-items    : center;
+  gap            : 14px;
+  transition     : transform 0.25s, background 0.25s, border-color 0.25s;
+
+  /* Animation d'entrée — décalage géré en JS */
+  opacity    : 0;
+  transform  : translateY(24px);
+}
+
+/* Effet hover */
+.card:hover {
+  transform    : translateY(-4px);
+  background   : rgba(255, 255, 255, 0.12);
+  border-color : var(--or);
+}
+
+/* Carte visible (classe ajoutée par JS) */
+.card.visible {
+  animation : monterCarte 0.6s ease forwards;
+}
+
+@keyframes monterCarte {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ── Numéro de la carte ── */
+.num {
+  flex-shrink  : 0;
+  width        : 36px;
+  height       : 36px;
+  border-radius: 50%;
+  background   : linear-gradient(135deg, var(--bleu-vif), var(--bleu-clair));
+  display      : flex;
+  align-items  : center;
+  justify-content: center;
+  font-family  : 'Bebas Neue', cursive;
+  font-size    : 1.1rem;
+  color        : var(--blanc);
+  box-shadow   : 0 2px 10px rgba(0, 50, 200, 0.4);
+}
+
+/* ── Wrapper info dans la carte ── */
+.info {
+  display        : flex;
+  flex-direction : column;
+  gap            : 4px;
+}
+
+/* ── Titre du rôle ── */
+.role {
+  font-size      : 1rem;
+  font-weight    : 600;
+  color          : var(--blanc);
+  line-height    : 1.25;
+  text-transform : uppercase;
+  letter-spacing : 0.04em;
+}
+
+/* ── Nom du membre ── */
+.membre-nom {
+  font-size      : 0.82rem;
+  font-weight    : 600;
+  color          : var(--or);
+  letter-spacing : 0.08em;
+  text-transform : uppercase;
+}
+
+
+/* ─────────────────────────────────────────────
+   8. PIED DE PAGE (FOOTER)
+   ───────────────────────────────────────────── */
+footer {
+  text-align     : center;
+  padding        : 20px;
+  font-size      : 0.8rem;
+  color          : rgba(255, 255, 255, 0.35);
+  letter-spacing : 0.1em;
+  text-transform : uppercase;
+  position       : relative;
+  z-index        : 2;
+}
+
+
+/* ─────────────────────────────────────────────
+   9. RESPONSIVE MOBILE (< 480px)
+   ───────────────────────────────────────────── */
+@media (max-width: 480px) {
+
+  h1 {
+    font-size : 2.4rem;
+  }
+
+  .grid {
+    grid-template-columns : 1fr;
+  }
+
+  .logo-shield {
+    width : 60px;
+  }
+}
