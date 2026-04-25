@@ -11,11 +11,11 @@
     { "id": 7,  "nom": "Mariam",            "titre": "CD",  "role": "Responsable Cuisine"                      },
     { "id": 8,  "nom": "Rebecca",           "titre": "CD",  "role": "Responsable Cuisine Adjointe"             },
     { "id": 9,  "nom": "Armand",            "titre": "CT",  "role": "Responsable Sport"                        },
-    { "id": 10, "nom": "Decaho leopold",            "titre": "CP",  "role": "Responsable Prière"                       },
+    { "id": 10, "nom": "Decaho leopold",            "titre": "CP",  "role": "Responsable Prière"               },
     { "id": 11, "nom": "Gombleu Aquilas",   "titre": "CP",  "role": "Responsable Prière Adjoint"               },
-    { "id": 12, "nom": "CHEF N'guessan Emmanuel",          "titre": "SP",  "role": "Responsable Mission & Communication"      },
+    { "id": 12, "nom": "CHEF N'guessan Emmanuel",  "titre": "SP",  "role": "Responsable Mission & Communication"  },
     { "id": 13, "nom": "Kouame Patrick",    "titre": "ELT", "role": "Responsable Animation"                    },
-    { "id": 14, "nom": "inconnutos",              "titre": "—",   "role": "Infirmier du Camp"                        },
-    { "id": 15, "nom": "Commun Émilie",            "titre": "CP",  "role": "Trésorière du Camp"                       }
+    { "id": 14, "nom": "inconnutos",              "titre": "—",   "role": "Infirmier du Camp"                  },
+    { "id": 15, "nom": "Commun Émilie",            "titre": "CP",  "role": "Trésorière du Camp"                }
   ]
 }
