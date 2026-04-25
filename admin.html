@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin – Camp de District de Sideci</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <!-- Librairie QR code CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+
+    /* ════════════════════════════════
+       VARIABLES & RESET
+       ════════════════════════════════ */
+    :root {
+      --bleu      : #0033cc;
+      --bleu-nuit : #001466;
+      --bleu-sombre: #000e44;
+      --or        : #f0c040;
+      --or-fonce  : #c89000;
+      --blanc     : #ffffff;
+      --gris      : rgba(255,255,255,0.55);
+      --card-bg   : rgba(255,255,255,0.05);
+      --card-bord : rgba(255,255,255,0.12);
+      --rouge     : #ff4444;
+      --vert      : #22cc66;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family : 'Rajdhani', sans-serif;
+      background  : var(--bleu-sombre);
+      color       : var(--blanc);
+      min-height  : 100vh;
+    }
+
+    /* ── Fond rayures diagonales ── */
+    body::before {
+      content  : '';
+      position : fixed;
+      inset    : 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent, transparent 60px,
+        rgba(0,20,102,0.3) 60px, rgba(0,20,102,0.3) 120px
+      );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ════════════════════════════════
+       ÉCRAN DE CONNEXION
+       ════════════════════════════════ */
+    #ecran-login {
+      position        : fixed;
+      inset           : 0;
+      z-index         : 999;
+      display         : flex;
+      align-items     : center;
+      justify-content : center;
+      background      : linear-gradient(135deg, #000e44, #0033cc);
+    }
+
+    .login-box {
+      background    : rgba(255,255,255,0.06);
+      border        : 1.5px solid rgba(240,192,64,0.35);
+      backdrop-filter: blur(20px);
+      border-radius : 24px;
+      padding       : 48px 40px;
+      width         : 100%;
+      max-width     : 380px;
+      text-align    : center;
+      animation     : fadeUp 0.6s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(24px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    .login-logo {
+      font-family    : 'Bebas Neue', cursive;
+      font-size      : 2.6rem;
+      color          : var(--or);
+      letter-spacing : 0.1em;
+      margin-bottom  : 4px;
+    }
+
+    .login-sous {
+      font-size      : 0.75rem;
+      color          : var(--gris);
+      letter-spacing : 0.2em;
+      text-transform : uppercase;
+      margin-bottom  : 32px;
+    }
+
+    .login-label {
+      font-size      : 0.75rem;
+      font-weight    : 700;
+      letter-spacing : 0.2em;
+      color          : var(--gris);
+      text-transform : uppercase;
+      display        : block;
+      text-align     : left;
+      margin-bottom  : 8px;
+    }
+
+    .login-input {
+      width         : 100%;
+      background    : rgba(255,255,255,0.08);
+      border        : 1.5px solid rgba(255,255,255,0.15);
+      border-radius : 12px;
+      padding       : 14px 18px;
+      font-family   : 'Rajdhani', sans-serif;
+      font-size     : 1.1rem;
+      color         : var(--blanc);
+      outline       : none;
+      transition    : border-color 0.2s;
+      margin-bottom : 20px;
+      letter-spacing: 0.3em;
+    }
+
+    .login-input:focus {
+      border-color : var(--or);
+    }
+
+    .btn-login {
+      width         : 100%;
+      background    : linear-gradient(135deg, var(--or), var(--or-fonce));
+      color         : var(--bleu-nuit);
+      font-family   : 'Bebas Neue', cursive;
+      font-size     : 1.3rem;
+      letter-spacing: 0.15em;
+      border        : none;
+      border-radius : 12px;
+      padding       : 14px;
+      cursor        : pointer;
+      transition    : transform 0.15s, box-shadow 0.15s;
+    }
+
+    .btn-login:hover {
+      transform  : translateY(-2px);
+      box-shadow : 0 8px 24px rgba(240,192,64,0.4);
+    }
+
+    .login-erreur {
+      color       : var(--rouge);
+      font-size   : 0.85rem;
+      margin-top  : 12px;
+      min-height  : 20px;
+      font-weight : 600;
+    }
+
+    /* ════════════════════════════════
+       DASHBOARD PRINCIPAL
+       ════════════════════════════════ */
+    #dashboard {
+      display  : none;
+      position : relative;
+      z-index  : 1;
+    }
+
+    /* ── Navbar ── */
+    .navbar {
+      background    : rgba(0,10,60,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom : 1px solid rgba(240,192,64,0.2);
+      padding       : 0 32px;
+      display       : flex;
+      align-items   : center;
+      justify-content: space-between;
+      height        : 64px;
+      position      : sticky;
+      top           : 0;
+      z-index       : 100;
+    }
+
+    .nav-titre {
+      font-family    : 'Bebas Neue', cursive;
+      font-size      : 1.4rem;
+      color          : var(--or);
+      letter-spacing : 0.1em;
+    }
+
+    .nav-titre span {
+      color      : var(--blanc);
+      font-size  : 0.9rem;
+      letter-spacing: 0.05em;
+    }
+
+    .btn-deconnexion {
+      background    : rgba(255,68,68,0.15);
+      border        : 1px solid rgba(255,68,68,0.3);
+      color         : #ff8888;
+      font-family   : 'Rajdhani', sans-serif;
+      font-size     : 0.85rem;
+      font-weight   : 600;
+      letter-spacing: 0.1em;
+      padding       : 8px 16px;
+      border-radius : 8px;
+      cursor        : pointer;
+      transition    : all 0.2s;
+    }
+
+    .btn-deconnexion:hover {
+      background   : rgba(255,68,68,0.3);
+      border-color : #ff4444;
+    }
+
+    /* ── Contenu principal ── */
+    .contenu {
+      max-width : 1100px;
+      margin    : 0 auto;
+      padding   : 32px 24px 80px;
+    }
+
+    /* ── Stats en haut ── */
+    .stats {
+      display               : grid;
+      grid-template-columns : repeat(auto-fill, minmax(180px, 1fr));
+      gap                   : 14px;
+      margin-bottom         : 32px;
+    }
+
+    .stat-card {
+      background    : var(--card-bg);
+      border        : 1px solid var(--card-bord);
+      border-radius : 14px;
+      padding       : 20px;
+      text-align    : center;
+    }
+
+    .stat-num {
+      font-family    : 'Bebas Neue', cursive;
+      font-size      : 2.4rem;
+      color          : var(--or);
+      line-height    : 1;
+    }
+
+    .stat-label {
+      font-size      : 0.75rem;
+      color          : var(--gris);
+      letter-spacing : 0.15em;
+      text-transform : uppercase;
+      margin-top     : 4px;
+    }
+
+    /* ── Barre d'outils ── */
+    .toolbar {
+      display         : flex;
+      align-items     : center;
+      justify-content : space-between;
+      flex-wrap       : wrap;
+      gap             : 12px;
+      margin-bottom   : 24px;
+    }
+
+    .toolbar-titre {
+      font-family    : 'Bebas Neue', cursive;
+      font-size      : 1.5rem;
+      letter-spacing : 0.1em;
+      color          : var(--blanc);
+    }
+
+    .toolbar-actions {
+      display : flex;
+      gap     : 10px;
+    }
+
+    .btn {
+      font-family   : 'Rajdhani', sans-serif;
+      font-size     : 0.9rem;
+      font-weight   : 700;
+      letter-spacing: 0.08em;
+      padding       : 10px 20px;
+      border-radius : 10px;
+      border        : none;
+      cursor        : pointer;
+      transition    : all 0.2s;
+      text-transform: uppercase;
+    }
+
+    .btn-or {
+      background : linear-gradient(135deg, var(--or), var(--or-fonce));
+      color      : var(--bleu-nuit);
+    }
+
+    .btn-or:hover {
+      transform  : translateY(-2px);
+      box-shadow : 0 6px 20px rgba(240,192,64,0.4);
+    }
+
+    .btn-contour {
+      background : transparent;
+      border     : 1.5px solid rgba(255,255,255,0.2);
+      color      : var(--blanc);
+    }
+
+    .btn-contour:hover {
+      border-color : var(--or);
+      color        : var(--or);
+    }
+
+    .btn-vert {
+      background : linear-gradient(135deg, #22cc66, #159944);
+      color      : #fff;
+    }
+
+    .btn-vert:hover {
+      transform  : translateY(-2px);
+      box-shadow : 0 6px 20px rgba(34,204,102,0.35);
+    }
+
+    /* ── Grille membres ── */
+    .grille-membres {
+      display               : grid;
+      grid-template-columns : repeat(auto-fill, minmax(300px, 1fr));
+      gap                   : 14px;
+    }
+
+    /* ── Carte membre ── */
+    .membre-card {
+      background    : var(--card-bg);
+      border        : 1px solid var(--card-bord);
+      border-radius : 16px;
+      padding       : 20px;
+      transition    : border-color 0.2s, transform 0.2s;
+      animation     : fadeUp 0.5s ease both;
+    }
+
+    .membre-card:hover {
+      border-color : rgba(240,192,64,0.4);
+      transform    : translateY(-2px);
+    }
+
+    .card-header {
+      display         : flex;
+      align-items     : center;
+      justify-content : space-between;
+      margin-bottom   : 14px;
+    }
+
+    .card-num {
+      font-family    : 'Bebas Neue', cursive;
+      font-size      : 1.6rem;
+      color          : var(--or);
+      line-height    : 1;
+    }
+
+    .card-actions {
+      display : flex;
+      gap     : 6px;
+    }
+
+    .btn-icone {
+      width         : 32px;
+      height        : 32px;
+      border-radius : 8px;
+      border        : 1px solid rgba(255,255,255,0.12);
+      background    : rgba(255,255,255,0.06);
+      color         : var(--blanc);
+      cursor        : pointer;
+      font-size     : 0.9rem;
+      display       : flex;
+      align-items   : center;
+      justify-content: center;
+      transition    : all 0.2s;
+    }
+
+    .btn-icone:hover { background: rgba(255,255,255,0.15); }
+    .btn-icone.rouge:hover { background: rgba(255,68,68,0.2); border-color: #ff4444; color: #ff8888; }
+    .btn-icone.vert:hover  { background: rgba(34,204,102,0.2); border-color: #22cc66; color: #22cc66; }
+
+    /* Champs éditables */
+    .champ-group {
+      display       : flex;
+      flex-direction: column;
+      gap           : 8px;
+    }
+
+    .champ-label {
+      font-size      : 0.65rem;
+      font-weight    : 700;
+      letter-spacing : 0.2em;
+      color          : var(--gris);
+      text-transform : uppercase;
+    }
+
+    .champ-input {
+      width         : 100%;
+      background    : rgba(255,255,255,0.06);
+      border        : 1px solid rgba(255,255,255,0.1);
+      border-radius : 8px;
+      padding       : 9px 12px;
+      font-family   : 'Rajdhani', sans-serif;
+      font-size     : 0.95rem;
+      font-weight   : 600;
+      color         : var(--blanc);
+      outline       : none;
+      transition    : border-color 0.2s;
+    }
+
+    .champ-input:focus {
+      border-color : var(--or);
+      background   : rgba(255,255,255,0.09);
+    }
+
+    .champ-row {
+      display : grid;
+      grid-template-columns: 1fr 1fr;
+      gap     : 8px;
+    }
+
+    /* QR preview dans la carte */
+    .qr-preview {
+      margin-top     : 14px;
+      display        : flex;
+      align-items    : center;
+      gap            : 12px;
+      padding        : 12px;
+      background     : rgba(255,255,255,0.04);
+      border-radius  : 10px;
+      border         : 1px solid rgba(255,255,255,0.08);
+    }
+
+    .qr-canvas-wrap {
+      width       : 64px;
+      height      : 64px;
+      flex-shrink : 0;
+      background  : #fff;
+      border-radius: 6px;
+      overflow    : hidden;
+      display     : flex;
+      align-items : center;
+      justify-content: center;
+    }
+
+    .qr-canvas-wrap canvas,
+    .qr-canvas-wrap img {
+      width  : 64px !important;
+      height : 64px !important;
+    }
+
+    .qr-info {
+      flex : 1;
+      min-width: 0;
+    }
+
+    .qr-nom-preview {
+      font-family    : 'Bebas Neue', cursive;
+      font-size      : 1rem;
+      color          : var(--blanc);
+      white-space    : nowrap;
+      overflow       : hidden;
+      text-overflow  : ellipsis;
+    }
+
+    .qr-role-preview {
+      font-size   : 0.75rem;
+      color       : var(--gris);
+      margin-top  : 2px;
+      white-space : nowrap;
+      overflow    : hidden;
+      text-overflow: ellipsis;
+    }
+
+    .btn-dl-qr {
+      flex-shrink   : 0;
+      font-size     : 1.1rem;
+      width         : 34px;
+      height        : 34px;
+      border-radius : 8px;
+      border        : 1px solid rgba(240,192,64,0.3);
+      background    : rgba(240,192,64,0.1);
+      color         : var(--or);
+      cursor        : pointer;
+      display       : flex;
+      align-items   : center;
+      justify-content: center;
+      transition    : all 0.2s;
+    }
+
+    .btn-dl-qr:hover {
+      background   : rgba(240,192,64,0.25);
+      border-color : var(--or);
+    }
+
+    /* ── Modal ajout ── */
+    .overlay {
+      display         : none;
+      position        : fixed;
+      inset           : 0;
+      background      : rgba(0,0,0,0.7);
+      z-index         : 500;
+      align-items     : center;
+      justify-content : center;
+      backdrop-filter : blur(6px);
+    }
+
+    .overlay.actif { display: flex; }
+
+    .modal {
+      background    : #001050;
+      border        : 1.5px solid rgba(240,192,64,0.3);
+      border-radius : 20px;
+      padding       : 36px 32px;
+      width         : 100%;
+      max-width     : 440px;
+      animation     : fadeUp 0.3s ease both;
+    }
+
+    .modal-titre {
+      font-family    : 'Bebas Neue', cursive;
+      font-size      : 1.6rem;
+      color          : var(--or);
+      letter-spacing : 0.1em;
+      margin-bottom  : 24px;
+    }
+
+    .modal-champ {
+      margin-bottom : 16px;
+    }
+
+    .modal-label {
+      font-size      : 0.7rem;
+      font-weight    : 700;
+      letter-spacing : 0.2em;
+      color          : var(--gris);
+      text-transform : uppercase;
+      display        : block;
+      margin-bottom  : 6px;
+    }
+
+    .modal-input {
+      width         : 100%;
+      background    : rgba(255,255,255,0.08);
+      border        : 1.5px solid rgba(255,255,255,0.12);
+      border-radius : 10px;
+      padding       : 12px 16px;
+      font-family   : 'Rajdhani', sans-serif;
+      font-size     : 1rem;
+      color         : var(--blanc);
+      outline       : none;
+      transition    : border-color 0.2s;
+    }
+
+    .modal-input:focus { border-color: var(--or); }
+
+    .modal-actions {
+      display         : flex;
+      gap             : 10px;
+      justify-content : flex-end;
+      margin-top      : 24px;
+    }
+
+    /* ── Toast notification ── */
+    .toast {
+      position      : fixed;
+      bottom        : 30px;
+      right         : 30px;
+      background    : linear-gradient(135deg, var(--or), var(--or-fonce));
+      color         : var(--bleu-nuit);
+      font-family   : 'Rajdhani', sans-serif;
+      font-weight   : 700;
+      font-size     : 0.95rem;
+      padding       : 14px 22px;
+      border-radius : 12px;
+      z-index       : 900;
+      transform     : translateY(80px);
+      opacity       : 0;
+      transition    : all 0.35s cubic-bezier(.22,1,.36,1);
+      box-shadow    : 0 8px 32px rgba(0,0,0,0.3);
+    }
+
+    .toast.visible {
+      transform : translateY(0);
+      opacity   : 1;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .navbar { padding: 0 16px; }
+      .contenu { padding: 20px 14px 60px; }
+      .grille-membres { grid-template-columns: 1fr; }
+      .champ-row { grid-template-columns: 1fr; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════
+       ÉCRAN DE CONNEXION
+       ══════════════════════════════ -->
+  <div id="ecran-login">
+    <div class="login-box">
+      <div class="login-logo">⛺ ADMIN</div>
+      <p class="login-sous">Camp de District de Sideci · J.E.A</p>
+
+      <label class="login-label">Mot de passe</label>
+      <input type="password" class="login-input" id="input-mdp"
+             placeholder="••••••••" autocomplete="current-password"
+             onkeydown="if(event.key==='Enter') seConnecter()"/>
+
+      <button class="btn-login" onclick="seConnecter()">ACCÉDER AU PANNEAU</button>
+      <p class="login-erreur" id="login-erreur"></p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       DASHBOARD
+       ══════════════════════════════ -->
+  <div id="dashboard">
+
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div>
+        <div class="nav-titre">⛺ ADMIN PANEL</div>
+        <div style="font-size:0.65rem;color:var(--gris);letter-spacing:.15em;text-transform:uppercase;">
+          Camp de District de Sideci
+        </div>
+      </div>
+      <button class="btn-deconnexion" onclick="seDeconnecter()">🔒 Déconnexion</button>
+    </nav>
+
+    <div class="contenu">
+
+      <!-- Stats -->
+      <div class="stats" id="stats-zone"></div>
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="toolbar-titre">▸ Membres du Bureau</div>
+        <div class="toolbar-actions">
+          <button class="btn btn-contour" onclick="exporterJSON()">⬇ Exporter data.json</button>
+          <button class="btn btn-vert"    onclick="telechargerTousQR()">📥 Tous les QR</button>
+          <button class="btn btn-or"      onclick="ouvrirModal()">+ Ajouter</button>
+        </div>
+      </div>
+
+      <!-- Grille membres -->
+      <div class="grille-membres" id="grille"></div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       MODAL AJOUT / EDITION
+       ══════════════════════════════ -->
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <div class="modal-titre" id="modal-titre">➕ Nouveau Membre</div>
+
+      <div class="modal-champ">
+        <label class="modal-label">Nom & Prénom</label>
+        <input class="modal-input" id="m-nom" placeholder="Ex: Legnan Joël"/>
+      </div>
+      <div class="modal-champ">
+        <label class="modal-label">Titre</label>
+        <input class="modal-input" id="m-titre" placeholder="Ex: CTA, CT, CP, CD, SP, ELT…"/>
+      </div>
+      <div class="modal-champ">
+        <label class="modal-label">Rôle dans le bureau</label>
+        <input class="modal-input" id="m-role" placeholder="Ex: Directeur du Camp"/>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-contour" onclick="fermerModal()">Annuler</button>
+        <button class="btn btn-or"      onclick="sauvegarderMembre()">Sauvegarder</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+
+    /* ══════════════════════════════════════════════
+       CONFIGURATION
+       ══════════════════════════════════════════════ */
+
+    // ⚠️ CHANGE CE MOT DE PASSE ICI
+    var MOT_DE_PASSE = "sideci2025";
+
+    // URL de base du site GitHub Pages
+    var BASE_URL = "https://Orel-Digital-service.github.io/Repository-name-camp-de-district-desideci/membre.html";
+
+    /* ══════════════════════════════════════════════
+       DONNÉES (chargées depuis data.json ou localStorage)
+       ══════════════════════════════════════════════ */
+
+    var membres = [];
+    var editIndex = null; // index du membre en cours d'édition
+
+    /* ── Charger les données ── */
+    function chargerDonnees() {
+      // D'abord localStorage (modifs admin)
+      var local = localStorage.getItem('campSideci_membres');
+      if (local) {
+        membres = JSON.parse(local);
+        renderDashboard();
+      } else {
+        // Sinon charger data.json
+        fetch('data.json?v=' + Date.now())
+          .then(function(r){ return r.json(); })
+          .then(function(data){
+            membres = data.membres;
+            renderDashboard();
+          })
+          .catch(function(){
+            // Données par défaut si fetch impossible
+            membres = [
+              { id:1,  nom:"Legnan Joël",       titre:"CTA", role:"Directeur du Camp"                        },
+              { id:2,  nom:"Willy",             titre:"CTA", role:"Directeur Adjoint"                        },
+              { id:3,  nom:"Meli Aristide",     titre:"CTA", role:"Secrétaire du Camp"                       },
+              { id:4,  nom:"GONTO Josias",      titre:"CT",  role:"Commissaire de Police"                    },
+              { id:5,  nom:"Hurus",             titre:"CT",  role:"Commissaire de Police Adjoint"            },
+              { id:6,  nom:"Bekanti Marc Orel", titre:"SP",  role:"Secrétaire de la Police & Communication" },
+              { id:7,  nom:"Mariam",            titre:"CD",  role:"Responsable Cuisine"                      },
+              { id:8,  nom:"Rebecca",           titre:"CD",  role:"Responsable Cuisine Adjointe"             },
+              { id:9,  nom:"Armand",            titre:"CT",  role:"Responsable Sport"                        },
+              { id:10, nom:"Decaho",            titre:"CP",  role:"Responsable Prière"                       },
+              { id:11, nom:"Gombleu Aquilas",   titre:"CP",  role:"Responsable Prière Adjoint"               },
+              { id:12, nom:"Emmanuel",          titre:"SP",  role:"Responsable Mission & Communication"      },
+              { id:13, nom:"Kouame Patrick",    titre:"ELT", role:"Responsable Animation"                    },
+              { id:14, nom:"Sayé",              titre:"—",   role:"Infirmier du Camp"                        },
+              { id:15, nom:"Émilie",            titre:"CP",  role:"Trésorière du Camp"                       }
+            ];
+            renderDashboard();
+          });
+      }
+    }
+
+    /* ── Sauvegarder dans localStorage ── */
+    function sauvegarderLocal() {
+      localStorage.setItem('campSideci_membres', JSON.stringify(membres));
+    }
+
+    /* ══════════════════════════════════════════════
+       AUTHENTIFICATION
+       ══════════════════════════════════════════════ */
+
+    function seConnecter() {
+      var mdp = document.getElementById('input-mdp').value;
+      if (mdp === MOT_DE_PASSE) {
+        document.getElementById('ecran-login').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        chargerDonnees();
+      } else {
+        var err = document.getElementById('login-erreur');
+        err.textContent = '⚠️ Mot de passe incorrect';
+        setTimeout(function(){ err.textContent = ''; }, 2500);
+        document.getElementById('input-mdp').value = '';
+      }
+    }
+
+    function seDeconnecter() {
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('ecran-login').style.display = 'flex';
+      document.getElementById('input-mdp').value = '';
+    }
+
+    /* ══════════════════════════════════════════════
+       RENDU DU DASHBOARD
+       ══════════════════════════════════════════════ */
+
+    function renderDashboard() {
+      renderStats();
+      renderGrille();
+    }
+
+    function renderStats() {
+      var titres = {};
+      membres.forEach(function(m){
+        titres[m.titre] = (titres[m.titre]||0)+1;
+      });
+      var html = '<div class="stat-card"><div class="stat-num">' + membres.length + '</div><div class="stat-label">Membres</div></div>';
+      Object.keys(titres).forEach(function(t){
+        html += '<div class="stat-card"><div class="stat-num">' + titres[t] + '</div><div class="stat-label">' + t + '</div></div>';
+      });
+      document.getElementById('stats-zone').innerHTML = html;
+    }
+
+    function renderGrille() {
+      var grille = document.getElementById('grille');
+      grille.innerHTML = '';
+
+      membres.forEach(function(m, index) {
+        var card = document.createElement('div');
+        card.className = 'membre-card';
+        card.style.animationDelay = (index * 0.04) + 's';
+
+        card.innerHTML =
+          '<div class="card-header">' +
+            '<div class="card-num">' + String(m.id).padStart(2,'0') + '</div>' +
+            '<div class="card-actions">' +
+              '<button class="btn-icone vert" title="Aperçu" onclick="apercu(' + index + ')">👁</button>' +
+              '<button class="btn-icone"      title="Modifier" onclick="editerMembre(' + index + ')">✏️</button>' +
+              '<button class="btn-icone rouge" title="Supprimer" onclick="supprimerMembre(' + index + ')">🗑</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="champ-group">' +
+            '<div>' +
+              '<div class="champ-label">Nom & Prénom</div>' +
+              '<input class="champ-input" value="' + m.nom + '" onchange="majChamp(' + index + ',\'nom\',this.value)"/>' +
+            '</div>' +
+            '<div class="champ-row">' +
+              '<div>' +
+                '<div class="champ-label">Titre</div>' +
+                '<input class="champ-input" value="' + m.titre + '" onchange="majChamp(' + index + ',\'titre\',this.value)"/>' +
+              '</div>' +
+              '<div>' +
+                '<div class="champ-label">ID QR</div>' +
+                '<input class="champ-input" value="' + m.id + '" style="color:var(--or)" readonly/>' +
+              '</div>' +
+            '</div>' +
+            '<div>' +
+              '<div class="champ-label">Rôle dans le bureau</div>' +
+              '<input class="champ-input" value="' + m.role + '" onchange="majChamp(' + index + ',\'role\',this.value)"/>' +
+            '</div>' +
+          '</div>' +
+          '<div class="qr-preview">' +
+            '<div class="qr-canvas-wrap" id="qr-' + index + '"></div>' +
+            '<div class="qr-info">' +
+              '<div class="qr-nom-preview">' + m.nom + '</div>' +
+              '<div class="qr-role-preview">' + m.role + '</div>' +
+            '</div>' +
+            '<button class="btn-dl-qr" title="Télécharger ce QR" onclick="telechargerQR(' + index + ')">⬇</button>' +
+          '</div>';
+
+        grille.appendChild(card);
+
+        // Générer le QR code
+        setTimeout(function(){ genererQR(index, m.id); }, index * 30);
+      });
+    }
+
+    /* ══════════════════════════════════════════════
+       QR CODE
+       ══════════════════════════════════════════════ */
+
+    function genererQR(index, id) {
+      var wrap = document.getElementById('qr-' + index);
+      if (!wrap) return;
+      wrap.innerHTML = '';
+      new QRCode(wrap, {
+        text        : BASE_URL + '?id=' + id,
+        width       : 64,
+        height      : 64,
+        colorDark   : '#001466',
+        colorLight  : '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    }
+
+    function telechargerQR(index) {
+      var m = membres[index];
+      var wrap = document.getElementById('qr-' + index);
+      var canvas = wrap ? wrap.querySelector('canvas') : null;
+      if (!canvas) { afficherToast('QR non prêt'); return; }
+
+      // Créer un canvas plus grand pour le téléchargement
+      var grand = document.createElement('canvas');
+      grand.width = 400; grand.height = 400;
+      var ctx = grand.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0,0,400,400);
+      ctx.drawImage(canvas, 40, 40, 320, 320);
+
+      var lien = document.createElement('a');
+      lien.download = 'QR_' + String(m.id).padStart(2,'0') + '_' + m.nom.replace(/\s+/g,'_') + '.png';
+      lien.href = grand.toDataURL('image/png');
+      lien.click();
+      afficherToast('QR téléchargé ! ✅');
+    }
+
+    function telechargerTousQR() {
+      afficherToast('Téléchargement de ' + membres.length + ' QR codes…');
+      membres.forEach(function(m, i){
+        setTimeout(function(){
+          telechargerQR(i);
+        }, i * 400);
+      });
+    }
+
+    /* ══════════════════════════════════════════════
+       GESTION DES MEMBRES
+       ══════════════════════════════════════════════ */
+
+    function majChamp(index, champ, valeur) {
+      membres[index][champ] = valeur;
+      sauvegarderLocal();
+      renderStats();
+      afficherToast('Modification sauvegardée ✅');
+    }
+
+    function apercu(index) {
+      var m = membres[index];
+      window.open(BASE_URL + '?id=' + m.id, '_blank');
+    }
+
+    function editerMembre(index) {
+      editIndex = index;
+      var m = membres[index];
+      document.getElementById('modal-titre').textContent = '✏️ Modifier Membre';
+      document.getElementById('m-nom').value   = m.nom;
+      document.getElementById('m-titre').value = m.titre;
+      document.getElementById('m-role').value  = m.role;
+      ouvrirModal();
+    }
+
+    function supprimerMembre(index) {
+      if (!confirm('Supprimer ce membre ?')) return;
+      membres.splice(index, 1);
+      // Réattribuer les IDs
+      membres.forEach(function(m, i){ m.id = i+1; });
+      sauvegarderLocal();
+      renderDashboard();
+      afficherToast('Membre supprimé');
+    }
+
+    function ouvrirModal(nouveau) {
+      if (nouveau) {
+        editIndex = null;
+        document.getElementById('modal-titre').textContent = '➕ Nouveau Membre';
+        document.getElementById('m-nom').value   = '';
+        document.getElementById('m-titre').value = '';
+        document.getElementById('m-role').value  = '';
+      }
+      document.getElementById('overlay').classList.add('actif');
+    }
+
+    function fermerModal() {
+      document.getElementById('overlay').classList.remove('actif');
+      editIndex = null;
+    }
+
+    function sauvegarderMembre() {
+      var nom   = document.getElementById('m-nom').value.trim();
+      var titre = document.getElementById('m-titre').value.trim();
+      var role  = document.getElementById('m-role').value.trim();
+
+      if (!nom || !titre || !role) {
+        afficherToast('⚠️ Tous les champs sont requis'); return;
+      }
+
+      if (editIndex !== null) {
+        membres[editIndex].nom   = nom;
+        membres[editIndex].titre = titre;
+        membres[editIndex].role  = role;
+        afficherToast('Membre modifié ✅');
+      } else {
+        var newId = membres.length > 0 ? Math.max.apply(null, membres.map(function(m){return m.id;})) + 1 : 1;
+        membres.push({ id: newId, nom: nom, titre: titre, role: role });
+        afficherToast('Membre ajouté ✅');
+      }
+
+      sauvegarderLocal();
+      fermerModal();
+      renderDashboard();
+    }
+
+    /* ══════════════════════════════════════════════
+       EXPORT data.json
+       ══════════════════════════════════════════════ */
+
+    function exporterJSON() {
+      var data = {
+        camp          : "Camp de District de Sideci",
+        organisation  : "Jeunesse Évangélique Africaine",
+        membres       : membres
+      };
+      var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      var lien = document.createElement('a');
+      lien.href     = URL.createObjectURL(blob);
+      lien.download = 'data.json';
+      lien.click();
+      afficherToast('data.json exporté ! ⬇ Upload-le sur GitHub');
+    }
+
+    /* ══════════════════════════════════════════════
+       TOAST NOTIFICATION
+       ══════════════════════════════════════════════ */
+
+    var toastTimer;
+    function afficherToast(msg) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('visible');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function(){ t.classList.remove('visible'); }, 2800);
+    }
+
+    /* ── Fermer modal en cliquant l'overlay ── */
+    document.getElementById('overlay').addEventListener('click', function(e){
+      if (e.target === this) fermerModal();
+    });
+
+    /* ── Enter pour login ── */
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') fermerModal();
+    });
+
+  </script>
+</body>
+</html>
