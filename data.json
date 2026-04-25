@@ -8,7 +8,7 @@
     { "id": 4,  "nom": "GONTO Josias",      "titre": "CT",  "role": "Commissaire de Police"                    },
     { "id": 5,  "nom": "Hurus",             "titre": "CT",  "role": "Commissaire de Police Adjoint"            },
     { "id": 6,  "nom": "CHEF Kouame Kouassi Bekanti Marc Orel", "titre": "SP",  "role": "Secrétaire de la Police & Communication" },
-    { "id": 7,  "nom": "Mariam",            "titre": "CD",  "role": "Responsable Cuisine"                      },
+    { "id": 7,  "nom": "Koné Mariam",            "titre": "CD",  "role": "Responsable Cuisine"                      },
     { "id": 8,  "nom": "Rebecca",           "titre": "CD",  "role": "Responsable Cuisine Adjointe"             },
     { "id": 9,  "nom": "Armand",            "titre": "CT",  "role": "Responsable Sport"                        },
     { "id": 10, "nom": "Decaho leopold",            "titre": "CP",  "role": "Responsable Prière"               },
