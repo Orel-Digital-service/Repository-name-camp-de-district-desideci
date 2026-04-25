@@ -17,6 +17,6 @@
     { "id": 13, "nom": "Kouame Patrick",    "titre": "ELT", "role": "Responsable Animation"                    },
     { "id": 14, "nom": "Sayé",              "titre": "—",   "role": "Infirmier du Camp"                        },
     { "id": 15, "nom": "Émilie",            "titre": "CP",  "role": "Trésorière du Camp"                       },
-    { "id": 15, "nom": "siho",            "titre": "CP",  "role": "Mangeur de femme"                       }
+    { "id": 16, "nom": "siho",            "titre": "CP",  "role": "Mangeur de femme"                       }
   ]
 }
